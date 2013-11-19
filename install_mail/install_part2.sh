@@ -143,7 +143,7 @@ read -p "Press any key to continue... " -n1 -s
 
 
 ### add user
-read -p "Enter your user name (the left part of the email address) : " USERLOGIN
+read -p "Enter your user name (the left part of the email address), it will be your domain admin : " USERLOGIN
 echo
 
 useradd  -m $USERLOGIN
@@ -154,6 +154,7 @@ passwd $USERLOGIN
 mkdir /home/$USERLOGIN/mail -p
 touch /home/$USERLOGIN/mail/INBOX
 chown $USERLOGIN:mail /home/$USERLOGIN/mail -R
+echo "root: $USERLOGIN" >> /etc/aliases
 
 
 
