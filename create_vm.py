@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import os
 import time
 from xmlrpclib import ServerProxy
 from optparse import OptionParser
@@ -70,7 +71,7 @@ class VMCreate:
         self.api.hosting.ip.update(self.apikey, ip_id, {'reverse': reverse})
 
     def process(self):
-        source_disk = self.get_source_disk()
+        source_disk = self.get_source_disk()[0]
         ops = self.create_vm(source_disk['disk_id'])
         vm_id = ops[2]['vm_id']
 
@@ -80,7 +81,7 @@ class VMCreate:
         while self.info_op(attach['id'])['step'] in ('BILL', 'WAIT', 'RUN'):
             time.sleep(60)
 
-        step = self.info_op(attach['id'])
+        step = self.info_op(attach['id'])['step']
         if step != 'DONE':
             raise
 
