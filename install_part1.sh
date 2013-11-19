@@ -48,3 +48,6 @@ scp -r install_mail root@$SERVER_IP:/tmp/
 
 echo "We are now login to the server to execute the remaining install script"
 ssh root@$SERVER_IP "cd /tmp/install_mail/; ./install_part2.sh $DOMAIN"
+
+echo "Cleaning files on server"
+ssh root@$SERVER_IP "rm -fr /tmp/install_mail/"
