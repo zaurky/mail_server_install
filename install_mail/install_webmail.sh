@@ -52,4 +52,4 @@ echo "
 </VirtualHost>
 " >> /etc/apache2/sites-enabled/000-default
 
-service apache2 reload
+service apache2 start || service apache2 reload
