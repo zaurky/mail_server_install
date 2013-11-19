@@ -112,6 +112,7 @@ perl -pi -e 's|#\$myhostname = "mail.example.com";|\$myhostname = "mail.'$DOMAIN
 perl -pi -e "s|=>  1.0,|=>  1.0,\n     '.$DOMAIN'                                 => -3.0,|" /etc/amavis/conf.d/20-debian_defaults
 perl -pi -e 's|#\@bypass_spam_checks_maps|\@bypass_spam_checks_maps|' /etc/amavis/conf.d/15-content_filter_mode
 perl -pi -e 's|#   \\%bypass_spam_checks|   \\%bypass_spam_checks|' /etc/amavis/conf.d/15-content_filter_mode
+echo "amavis:        root" >> /etc/aliases
 
 
 ### SPAMASSASSIN
@@ -156,6 +157,7 @@ chown $USERLOGIN:mail /home/$USERLOGIN/mail -R
 
 
 ### RESTART SERVICES
+newaliases
 service saslauthd restart
 service dovecot restart
 service amavis restart
