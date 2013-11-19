@@ -2,7 +2,8 @@
 
 DOMAIN=$1
 
-apt-get update
+echo "updating apt repo"
+apt-get update > /dev/null
 
 echo "We are going to install the locales you want"
 read -p "Press any key to continue... " -n1 -s
@@ -18,7 +19,8 @@ echo "We are going to install postfix, select \"internet website\" and then \"ma
 read -p "Press any key to continue... " -n1 -s
 echo
 
-apt-get install --yes postfix
+echo "installing postfix"
+apt-get install --yes postfix > /dev/null
 
 echo $DOMAIN > /etc/mailname
 
@@ -56,7 +58,8 @@ cp data/master.cf /etc/postfix/master.cf
 
 
 ### SASL
-apt-get install --yes sasl2-bin
+echo "installing sasl"
+apt-get install --yes sasl2-bin > /dev/null
 perl -pi -e 's|START=no|START=yes|' /etc/default/saslauthd
 perl -pi -e 's|MECHANISMS="pam"|MECHANISMS="rimap"|' /etc/default/saslauthd
 perl -pi -e 's|OPTIONS="-c -m /var/run/saslauthd"||' /etc/default/saslauthd
@@ -67,7 +70,8 @@ OPTIONS="-r -m /var/spool/postfix/var/run/saslauthd -O localhost -c"' >> /etc/de
 
 
 ### DOVECOT
-apt-get install --yes dovecot-common dovecot-core dovecot-imapd dovecot-lmtpd
+echo "installing dovecot"
+apt-get install --yes dovecot-common dovecot-core dovecot-imapd dovecot-lmtpd > /dev/null
 
 echo "
 protocols = imap lmtp
@@ -98,11 +102,13 @@ echo "protocol lmtp {
 
 
 ### SIEVE
-apt-get install --yes dovecot-sieve
+echo "installing sieve"
+apt-get install --yes dovecot-sieve > /dev/null
 
 
 ### AMAVIS
-apt-get install --yes amavisd-new gzip bzip2 unzip unrar cpio rpm nomarch cabextract arj arc zoo lzop pax
+echo "installing amavis"
+apt-get install --yes amavisd-new gzip bzip2 unzip unrar cpio rpm nomarch cabextract arj arc zoo lzop pax > /dev/null
 perl -pi -e 's|^# ?\$unfreeze|\$unfreeze|' /etc/amavis/conf.d/01-debian
 perl -pi -e 's|^\$unfreeze\s+= undef;|# \$unfreeze = undef;|' /etc/amavis/conf.d/01-debian
 perl -pi -e 's|^# ?\$lha|\$lha|' /etc/amavis/conf.d/01-debian
@@ -116,12 +122,14 @@ echo "amavis:        root" >> /etc/aliases
 
 
 ### SPAMASSASSIN
-apt-get install --yes spamassassin
+echo "installing spamassassin"
+apt-get install --yes spamassassin > /dev/null
 perl -pi -e 's|ENABLED=0|ENABLED=1|' /etc/default/spamassassin
 
 
 ### OPENDKIM
-apt-get install --yes opendkim opendkim-tools
+echo "installing opendkim"
+apt-get install --yes opendkim opendkim-tools > /dev/null
 mv /etc/opendkim.conf /etc/opendkim.conf.orig
 cp data/opendkim.conf /etc/opendkim.conf
 mkdir -p /etc/opendkim/$DOMAIN
@@ -137,7 +145,7 @@ mv mail.private mail
 chown opendkim:opendkim *
 chmod u=rw,go-rwx * 
 
-echo "mettre la ligne suivante dans la zone du domain"
+echo "put the following line in your domain dns"
 cat /etc/opendkim/$DOMAIN/mail.txt
 read -p "Press any key to continue... " -n1 -s
 
@@ -159,6 +167,7 @@ echo "root: $USERLOGIN" >> /etc/aliases
 
 
 ### RESTART SERVICES
+echo "restarting all services"
 newaliases
 service saslauthd restart
 service dovecot restart
