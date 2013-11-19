@@ -11,10 +11,6 @@ echo
 
 read -p "Enter the domain name : " DOMAIN
 
-#DOMAIN="veau.me"
-#SERVER_IP='92.243.2.88'
-#SERVER_IPV6='2001:4b98:dc0:41:216:3eff:fe45:7598'
-
 echo "On the gandi web site :
  * create a new vm (wheezy - debian 7)
  * change the reverse dns to mail.$DOMAIN
