@@ -2,25 +2,40 @@
 
 DOMAIN=$1
 
+export TERM='xterm'
+export LANG=en_US.UTF-8
+export DEBIAN_FRONTEND=noninteractive
+
+
 echo "updating apt repo"
 apt-get update > /dev/null
+apt-get install --yes debconf-utils > /dev/null
 
 echo "We are going to install the locales you want"
-read -p "Press any key to continue... " -n1 -s
+echo "Press any key to continue... "
+read -s
 echo
 
-dpkg-reconfigure locales
+locale-gen --purge en_US.UTF-8
+echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale
+
+# dpkg-reconfigure locales 
 
 perl -pi -e 's|localhost$|localhost mail mail.veau.me|' /etc/hosts
 
 ### POSTFIX
-echo "We are going to install postfix, select \"internet website\" and then \"mail.$DOMAIN\"
-"
-read -p "Press any key to continue... " -n1 -s
+echo "We are going to install postfix"
+echo "Press any key to continue... "
+read -s
 echo
 
+echo "postfix   postfix/mailname    string  mail.$DOMAIN" | debconf-set-selections
+echo "postfix   postfix/main_mailer_type    select  Internet Site" | debconf-set-selections
+echo "postfix   postfix/destinations    string  mail.veau.me, veau.me, localhost.veau.me, localhost" | debconf-set-selections
+
+
 echo "installing postfix"
-apt-get install --yes postfix > /dev/null
+apt-get install -q --yes postfix > /dev/null
 
 echo $DOMAIN > /etc/mailname
 
@@ -147,15 +162,18 @@ chmod u=rw,go-rwx *
 
 echo "put the following line in your domain dns"
 cat /etc/opendkim/$DOMAIN/mail.txt
-read -p "Press any key to continue... " -n1 -s
+echo "Press any key to continue... "
+read -s
+echo
 
 
 ### add user
-read -p "Enter your user name (the left part of the email address), it will be your domain admin : " USERLOGIN
+echo "Enter your user name (the left part of the email address), it will be your domain admin : "
+read USERLOGIN
 echo
 
 useradd  -m $USERLOGIN
-chsh $USERLOGIN /sbin/noshell
+# chsh -s /sbin/noshell $USERLOGIN
 echo "Enter password for $USERLOGIN"
 passwd $USERLOGIN
 
