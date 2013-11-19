@@ -18,6 +18,7 @@ class VMCreate:
         self.domain = config.domain
         self.hostname = config.hostname
         self.password = config.password
+        self.ssh_key = config.ssh_key
         self.datacenter = config.datacenter
         self.memory = config.memory
         self.data_size = config.data_size
@@ -36,19 +37,28 @@ class VMCreate:
         return self.api.hosting.vm.disk_attach(self.apikey, vm_id, disk_id)
 
     def create_vm(self, source_id):
-        return self.api.hosting.vm.create_from(self.apikey, {
-                                          'hostname': self.hostname,
-                                          'datacenter_id': self.datacenter,
-                                          'bandwidth': 102400,
-                                          'ai_active': 0,
-                                          'memory': self.memory,
-                                          'ip_version': 4,
-                                          'cores': 1,
-                                          'login': 'admin',
-                                          'password': self.password},
-                                         {'datacenter_id': self.datacenter,
-                                          'name': 'sysdisk%s' % self.hostname},
-                                         source_id)
+        vm_params = {'hostname': self.hostname,
+                     'datacenter_id': self.datacenter,
+                     'bandwidth': 102400,
+                     'ai_active': 0,
+                     'memory': self.memory,
+                     'ip_version': 4,
+                     'cores': 1,
+                     'login': 'admin'}
+
+        if self.password:
+            vm_params['password'] = self.password
+
+        if self.ssh_key:
+            vm_params['ssh_key'] = self.ssh_key
+
+        disk_params = {'datacenter_id': self.datacenter,
+                       'name': 'sysdisk%s' % self.hostname}
+
+        return self.api.hosting.vm.create_from(self.apikey,
+                                               vm_params,
+                                               disk_params,
+                                               source_id)
 
     def info_op(self, op_id):
         return self.api.operation.info(self.apikey, op_id)
@@ -85,11 +95,19 @@ class VMCreate:
 
 
 class Config(OptionParser):
+
+    _ssh_key = None
     def __init__(self, usage=None, description=None):
         OptionParser.__init__(self, usage=usage, description=description)
         self.add_option("-p", "--password",
             dest="password",
             help="the vm password",
+            default=None,
+        )
+
+        self.add_option("-s", "--ssh_key",
+            dest="ssh_key",
+            help="a public ssh key to acess the vm",
             default=None,
         )
 
@@ -106,7 +124,7 @@ class Config(OptionParser):
         )
 
         self.add_option("--datacenter",
-            dest="dacatenter",
+            dest="datacenter",
             help="the datacenter we should put the vm in",
             default=1,
         )
@@ -130,6 +148,8 @@ class Config(OptionParser):
         )
 
         (self.options, _args) = self.parse_args()
+        if not (self.options.password or self.options.ssh_key):
+            raise
 
     @property
     def apikey(self):
@@ -147,6 +167,14 @@ class Config(OptionParser):
     @property
     def password(self):
         return self.options.password
+
+    @property
+    def ssh_key(self):
+        if not self._ssh_key:
+            if os.path.exists(self.options.ssh_key):
+                with open(self.options.ssh_key) as filehandle:
+                    self._ssh_key = filehandle.read()
+        return self._ssh_key
 
     @property
     def datacenter(self):
