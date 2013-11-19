@@ -23,7 +23,6 @@ echo
 read -p "Enter the ipv4 : " SERVER_IP
 read -p "Enter the ipv6 : " SERVER_IPV6
 
-# Modifier la zone du domaine pour ajouter :
 echo "Modify the domain zone to put :
 
 \"\"\"
