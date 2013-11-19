@@ -137,8 +137,9 @@ mv mail.private mail
 chown opendkim:opendkim *
 chmod u=rw,go-rwx * 
 
-# mettre la ligne suivante dans la zone du domain
-cat mail.txt
+echo "mettre la ligne suivante dans la zone du domain"
+cat /etc/opendkim/$DOMAIN/mail.txt
+read -p "Press any key to continue... " -n1 -s
 
 
 ### add user
