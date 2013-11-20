@@ -31,9 +31,9 @@ class VMCreate:
 
     def create_disk(self, size):
         return self.api.hosting.disk.create(self.apikey, {
-                                              'datacenter_id': self.datacenter,
-                                              'name': 'data%s' % self.hostname,
-                                              'size': size})
+                        'datacenter_id': self.datacenter,
+                        'name': ('data%s' % self.hostname)[:15],
+                        'size': size})
 
     def attach_disk(self, vm_id, disk_id):
         return self.api.hosting.vm.disk_attach(self.apikey, vm_id, disk_id)
@@ -55,7 +55,7 @@ class VMCreate:
             vm_params['ssh_key'] = self.ssh_key
 
         disk_params = {'datacenter_id': self.datacenter,
-                       'name': 'sysdisk%s' % self.hostname}
+                       'name': ('sysdisk%s' % self.hostname)[:15]}
 
         return self.api.hosting.vm.create_from(self.apikey,
                                                vm_params,
