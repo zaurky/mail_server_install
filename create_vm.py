@@ -25,8 +25,9 @@ class VMCreate:
         self.data_size = config.data_size
 
     def get_source_disk(self):
-        return self.api.hosting.image.list(self.apikey, {'label': 'Debian 7',
-                                                         'os_arch': 'x86-32'})
+        return self.api.hosting.image.list(self.apikey, {
+                    'label': 'Debian 7 32 bits',
+                    'datacenter_id': self.datacenter})
 
     def create_disk(self, size):
         return self.api.hosting.disk.create(self.apikey, {
