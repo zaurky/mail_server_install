@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# dont want ssh-agent to say he don't know how to do stuff I didn't ask him to do
+export SSH_AUTH_SOCK=0
+
 function create_vm_manual() {
     DOMAIN=$1
     echo "On the gandi web site :
