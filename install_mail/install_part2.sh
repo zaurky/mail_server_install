@@ -4,6 +4,9 @@ DOMAIN=$1
 
 export TERM='xterm'
 export LANG=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
+export LC_MESSAGES=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 export DEBIAN_FRONTEND=noninteractive
 
 
