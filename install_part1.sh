@@ -74,6 +74,17 @@ _domainkey 10800 IN TXT \"o=-;\"
     echo
 }
 
+function install_webmail() {
+    DOMAIN=$1
+    SERVER_IP=$2
+
+    echo "Do you want to install a webmail ? (y/N)"
+    read -n 1 ANSWER
+
+    if [ "x$ANSWER" == "xY" ] || [ "x$ANSWER" == "xy" ]; then
+        ssh -i ~/.ssh/id_dsa.mail.$DOMAIN root@$SERVER_IP "cd /tmp/install_mail/; ./install_webmail.sh $DOMAIN"
+    fi
+}
 
 echo "usefull links :
    * http://infos-reseau.com/postfix-amavis-couple-avec-spamassassin-et-clamav/
@@ -93,6 +104,8 @@ scp -i ~/.ssh/id_dsa.mail.$DOMAIN -r install_mail root@$SERVER_IP:/tmp/
 
 echo "Login to the server to execute the remaining install script"
 ssh -i ~/.ssh/id_dsa.mail.$DOMAIN root@$SERVER_IP "cd /tmp/install_mail/; ./install_part2.sh $DOMAIN"
+
+install_webmail $DOMAIN $SERVER_IP
 
 echo "Cleaning files on server"
 ssh root@$SERVER_IP "rm -fr /tmp/install_mail/"
