@@ -15,23 +15,14 @@ apt-get update > /dev/null
 apt-get install --yes debconf-utils > /dev/null
 
 echo "We are going to install the locales you want"
-echo "Press any key to continue... "
-read -s
-echo
-
 locale-gen --purge en_US.UTF-8
 echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale
 
-# dpkg-reconfigure locales 
 
 perl -pi -e 's|localhost$|localhost mail mail.veau.me|' /etc/hosts
 
 ### POSTFIX
 echo "We are going to install postfix"
-echo "Press any key to continue... "
-read -s
-echo
-
 echo "postfix   postfix/mailname    string  mail.$DOMAIN" | debconf-set-selections
 echo "postfix   postfix/main_mailer_type    select  Internet Site" | debconf-set-selections
 echo "postfix   postfix/destinations    string  mail.veau.me, veau.me, localhost.veau.me, localhost" | debconf-set-selections
