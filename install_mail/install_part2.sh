@@ -173,7 +173,21 @@ passwd $USERLOGIN
 
 mkdir /home/$USERLOGIN/mail -p
 touch /home/$USERLOGIN/mail/INBOX
+touch /home/$USERLOGIN/mail/spam
 chown $USERLOGIN:mail /home/$USERLOGIN/mail -R
+echo 'require ["fileinto"];
+# Move spam to spam folder
+if header :contains "X-Spam-Flag" ["YES"] {
+  fileinto "spam";
+  stop;
+}
+if header :contains "subject" "***SPAM***" {
+  fileinto "spam";
+  stop;
+}
+' > /home/$USERLOGIN/.dovecot.sieve
+su - $USERLOGIN -c "sievec .dovecot.sieve"
+
 echo "root: $USERLOGIN" >> /etc/aliases
 
 
