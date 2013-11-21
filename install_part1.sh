@@ -108,4 +108,4 @@ ssh -i ~/.ssh/id_dsa.mail.$DOMAIN root@$SERVER_IP "cd /tmp/install_mail/; ./inst
 install_webmail $DOMAIN $SERVER_IP
 
 echo "Cleaning files on server"
-ssh root@$SERVER_IP "rm -fr /tmp/install_mail/"
+ssh -i ~/.ssh/id_dsa.mail.$DOMAIN root@$SERVER_IP "rm -fr /tmp/install_mail/"
