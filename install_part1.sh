@@ -109,3 +109,11 @@ install_webmail $DOMAIN $SERVER_IP
 
 echo "Cleaning files on server"
 ssh -i ~/.ssh/id_dsa.mail.$DOMAIN root@$SERVER_IP "rm -fr /tmp/install_mail/"
+
+echo "
+You can now configure your mailbox with :
+  * imap server : imap.$DOMAIN 993 SSL/TLS logged with normal password
+  * smtp server : mail.$DOMAIN 465 SSL/TLS logged with normal password
+"
+
+
