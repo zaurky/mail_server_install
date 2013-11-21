@@ -88,7 +88,7 @@ class VMCreate:
 
         iface = self.info_iface(vm_id)
         ip_versions = dict([(ip['version'], ip['ip']) for ip in iface['ips']])
-        reverse = 'mail.%s' % self.hostname
+        reverse = 'mail.%s' % self.domain
         [self.update_ip(ip['id'], reverse) for ip in iface['ips']]
 
         print "DOMAIN %s" % self.domain
