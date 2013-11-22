@@ -64,7 +64,7 @@ imap 10800 IN AAAA $SERVER_IPV6
 mail 10800 IN AAAA $SERVER_IPV6
 smtp 10800 IN AAAA $SERVER_IPV6
 @ 10800 IN MX 10 mail.$DOMAIN.
-@ 10800 IN TXT \"v=spf1 ip4:$SERVER_IP -all\"
+@ 10800 IN TXT \"v=spf1 ip4:$SERVER_IP ip6:$SERVER_IPV6 -all\"
 _domainkey 10800 IN TXT \"o=-;\"
 \"\"\"
 
