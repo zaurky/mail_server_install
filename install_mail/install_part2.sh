@@ -103,6 +103,7 @@ perl -pi -e 's|ssl_cert = .*$|ssl_cert = \</etc/ssl/certs/ssl-cert-snakeoil.pem|
 perl -pi -e 's|ssl_key = .*$|ssl_key = \</etc/ssl/private/ssl-cert-snakeoil.key|' /etc/dovecot/conf.d/10-ssl.conf
 perl -pi -e "s|#hostname =.*$|hostname = mail.$DOMAIN|" /etc/dovecot/conf.d/15-lda.conf
 perl -pi -e 's|protocol lda {|protocol lda {\n  mail_plugins = sieve|' /etc/dovecot/conf.d/15-lda.conf
+perl -pi -e 's|#imap_idle_notify_interval = 2 mins|imap_idle_notify_interval = 29 mins|' /etc/dovecot/conf.d/20-imap.conf
 mv /etc/dovecot/conf.d/20-lmtp.conf /etc/dovecot/conf.d/20-lmtp.conf.orig
 echo "protocol lmtp {
   postmaster_address = postmaster@$DOMAIN   # required
