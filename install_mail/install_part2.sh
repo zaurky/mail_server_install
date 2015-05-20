@@ -25,7 +25,7 @@ perl -pi -e "s|localhost$|localhost mail mail.$DOMAIN|" /etc/hosts
 echo "We are going to install postfix"
 echo "postfix   postfix/mailname    string  mail.$DOMAIN" | debconf-set-selections
 echo "postfix   postfix/main_mailer_type    select  Internet Site" | debconf-set-selections
-echo "postfix   postfix/destinations    string  mail.veau.me, veau.me, localhost.veau.me, localhost" | debconf-set-selections
+echo "postfix   postfix/destinations    string  mail.$DOMAIN, $DOMAIN, localhost.$DOMAIN, localhost" | debconf-set-selections
 
 
 echo "installing postfix"
