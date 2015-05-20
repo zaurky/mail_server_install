@@ -19,7 +19,7 @@ locale-gen --purge en_US.UTF-8
 echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale
 
 
-perl -pi -e 's|localhost$|localhost mail mail.veau.me|' /etc/hosts
+perl -pi -e "s|localhost$|localhost mail mail.$DOMAIN|" /etc/hosts
 
 ### POSTFIX
 echo "We are going to install postfix"
