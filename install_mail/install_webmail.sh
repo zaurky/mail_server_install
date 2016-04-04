@@ -49,7 +49,16 @@ echo "
         LogLevel warn
 
         CustomLog \${APACHE_LOG_DIR}/webmail.access.log combined
+        
+        <IfModule mod_headers.c>                                                                                                                                           
+            Header set Strict-Transport-Security "max-age=15768000;"                                                                                                   
+            Header set X-Content-Type-Options "nosniff"                                                                                                                
+            Header set X-Frame-Options "DENY"                                                                                                                          
+            Header set X-XSS-Protection "1; mode=block"                                                                                                                
+            Header set Content-Security-Policy "script-src 'self'"                                                                                                     
+        </IfModule>  
 </VirtualHost>
 " >> /etc/apache2/sites-enabled/000-default
 
+a2enmod headers
 service apache2 start || service apache2 reload
